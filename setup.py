@@ -18,10 +18,11 @@ setup(
     long_description=README,
     url='https://github.com/chrishendra93/taxi_analysis',
     packages=find_packages(),
-    package_data={'taxi_analysis.model': ['random_forest_model.joblib']},
+    package_data={'taxi_analysis.model': ['nn_model.pth', 'scaler.joblib', 'xgb_clf.joblib']},
     python_requires=">=3.7",
     install_requires=[
             'pyproj==3.2.1',
+            'torch==1.13.0',
             'Shapely==1.8.5.post1',
             'Rtree==1.0.1',
             'numpy==1.21.5',
@@ -29,12 +30,15 @@ setup(
             'scikit-learn==0.24.1',
             'mapclassify==2.4.3',
             'scipy==1.7.3',
+            'xgboost==1.6.2',
             'statsmodels==0.13.2',
+            'joblib',
             'jupyter',
             'geopandas==0.10.2',
             'matplotlib==3.5.2',
             ],
-    entry_points={'console_scripts': ["clean_data={}.scripts.clean_taxi_data:main".format(__pkg_name__)},
+    entry_points={'console_scripts': ["clean_data={}.scripts.clean_taxi_data:main".format(__pkg_name__),
+                                      "run_inference={}.scripts.run_inference:main".format(__pkg_name__)]},
     classifiers=[
         # Trove classifiers
         # (https://pypi.python.org/pypi?%3Aaction=list_classifiers)
