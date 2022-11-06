@@ -22,7 +22,7 @@ setup(
     python_requires=">=3.7",
     install_requires=[
             'pyproj==3.2.1',
-            'torch==1.13.0',
+            'torch>=1.6.0',
             'Shapely==1.8.5.post1',
             'Rtree==1.0.1',
             'numpy==1.21.5',
