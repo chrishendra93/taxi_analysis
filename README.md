@@ -26,7 +26,12 @@ To clean these datasets run
 $ clean data --input_dir 2021 2020 2019 2018 2017 --out_dir 2021 2020 2019 2018 2017
 ```
 
-There are three notebooks that contain data analysis, visualization, and model training on the taxi datasets. data_cleaning.ipynb details the reasoning behind the variables and choice of thresholds used to filter out anomalous rides from all the datasets. data_visualization.ipynb presents visualization of interesting ride patterns on all the datasets and fare_prediction.ipynb details model training and performance for predicting taxi fare on all 5 datasets
+There are three notebooks that contain data analysis, visualization, and model training on the taxi datasets. data_cleaning.ipynb details the reasoning behind the variables and choice of thresholds used to filter out anomalous rides from all the datasets. data_visualization.ipynb presents visualization of interesting ride patterns on all the datasets and fare_prediction.ipynb details model training and performance for predicting taxi fare on all 5 datasets. If you are running this repository on a machine with limited memory, run the sql-version of the analysis instead
+
+```sh
+$ sh initialize_database.sh
+$ psql chicago-taxi-data -f clean_data.sql -v min_fare=3.25 -v max_fare=100 -v min_trip_secs=60 -v max_trip_secs=60 -v max_mph=70
+```
 
 ### Contributors
 
