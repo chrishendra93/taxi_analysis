@@ -1,6 +1,6 @@
 # taxi_analysis
 
-taxi_analysis is a collection of notebooks and scripts to run analysis on the Chicago taxi dataset
+taxi_analysis is a collection of notebooks and scripts to run analysis on the Chicago taxi dataset. A presentation slides and long form report are available inside the report folder.
 
 ### Installation
 
