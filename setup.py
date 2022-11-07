@@ -18,7 +18,7 @@ setup(
     long_description=README,
     url='https://github.com/chrishendra93/taxi_analysis',
     packages=find_packages(),
-    package_data={'taxi_analysis.model': ['nn_model.pth', 'scaler.joblib', 'xgb_clf.joblib']},
+    package_data={'': ['model/nn_model.pth', 'model/scaler.joblib', 'model/xgb_clf.joblib']},
     python_requires=">=3.7",
     install_requires=[
             'pyproj==3.2.1',

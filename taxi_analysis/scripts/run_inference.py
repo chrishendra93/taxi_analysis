@@ -12,15 +12,15 @@ from sklearn.preprocessing import LabelEncoder
 from .model import FarePredictor
 
 
-DEFAULT_EMBEDDING_WEIGHTS = pkg_resources.resource_filename('taxi_analysis.model', 'nn_model.pth')
+DEFAULT_EMBEDDING_WEIGHTS = pkg_resources.resource_filename("taxi_analysis.model", 'nn_model.pth')
 DEFAULT_MODEL = pkg_resources.resource_filename('taxi_analysis.model', 'xgb_clf.joblib')
 DEFAULT_SCALER = pkg_resources.resource_filename('taxi_analysis.model', 'scaler.joblib')
-DEFAULT_NN_PARAMS = {'embedding_in_channels' : [79, 79, 5, 12, 7],
-                     'embedding_out_channels' : [2, 2, 2, 2, 2],
-                     'hidden_layers' : [32, 64, 32]}
 NUMERICAL_FEATURES = ['Trip Miles', 'Trip Seconds', 'Trip Start Time', 'Trip End Time']
 CAT_FEATURES = ['Pickup Community Area', 'Dropoff Community Area', 'Payment Type', 'month', 'weekday']
-
+DEFAULT_NN_PARAMS = {'numeric_features': NUMERICAL_FEATURES,
+                     'embedding_in_channels' : [79, 79, 5, 12, 7],
+                     'embedding_out_channels' : [2, 2, 2, 2, 2],
+                     'hidden_layers' : [32, 64, 32]}
 
 def argparser():
     parser = ArgumentParser(
@@ -83,7 +83,7 @@ def encode_cat_variables(df):
 def extract_embedding(df, num_columns, cat_columns, model):
     model.eval()
     with torch.no_grad():
-        embedding_layers = model.module.embedding_layers
+        embedding_layers = model.embedding_layers
         cat_features = torch.LongTensor(df[cat_columns].values)
         cat_features = torch.cat([embedding_layer(cat_feature.squeeze(1)) for 
                                   embedding_layer, cat_feature in
@@ -95,7 +95,7 @@ def run_inference(input_fpath, out_fpath, args):
 
     # Loading embedding models
     nn_model = FarePredictor(**DEFAULT_NN_PARAMS)
-    nn_model.load_state_dict(torch.load(DEFAULT_EMBEDDING_WEIGHTS['model']))
+    nn_model.load_state_dict({k.split("module.")[1]: v for k, v in torch.load(DEFAULT_EMBEDDING_WEIGHTS)['model'].items()})
 
     # Loading XGBoost Regressor
     
@@ -116,7 +116,7 @@ def run_inference(input_fpath, out_fpath, args):
 def main():
     args = argparser().parse_args()
 
-    if len(args.input_csv) != len(args.out_dir):
+    if len(args.input_fpath) != len(args.out_fpath):
         raise ValueError("Number of input directories must match number of output directories")
     
     for input_fpath, out_fpath in zip(args.input_fpath, args.out_fpath):
